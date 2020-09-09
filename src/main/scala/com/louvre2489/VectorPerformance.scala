@@ -1,10 +1,14 @@
 package com.louvre2489
 
-import org.openjdk.jmh.annotations.Benchmark
+import java.util.concurrent.TimeUnit
+
+import org.openjdk.jmh.annotations._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.List
 
+@BenchmarkMode(Array(Mode.SingleShotTime))
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
 class VectorPerformance {
 
   import VectorPerformance._
@@ -13,7 +17,7 @@ class VectorPerformance {
    * 線形アクセス
    */
 
-//  @Benchmark
+  @Benchmark
   def listLinearAccess_100(): Long = {
     linearAccess(list_100)
   }
@@ -44,11 +48,11 @@ class VectorPerformance {
       l match {
         case Nil => sum
         case head :: tail => go(head + sum, tail)
+      }
     }
-  }
 
-  go(0L, target)
-}
+    go(0L, target)
+  }
 
   @Benchmark
   def vectorLinearAccess_100(): Long = {
@@ -87,42 +91,42 @@ class VectorPerformance {
     go(0L, 0, target)
   }
 
-  @Benchmark
-  def arrayLinearAccess_100(): Long = {
-    arrayLinearAccess(array_100, 100)
-  }
-
-  @Benchmark
-  def arrayLinearAccess_1000(): Long = {
-    arrayLinearAccess(array_1000, 1000)
-  }
-
-  @Benchmark
-  def arrayLinearAccess_10000(): Long = {
-    arrayLinearAccess(array_10000, 10000)
-  }
-
-  @Benchmark
-  def arrayLinearAccess_100000(): Long = {
-    arrayLinearAccess(array_100000, 100000)
-  }
-
-  @Benchmark
-  def arrayLinearAccess_1000000(): Long = {
-    arrayLinearAccess(array_1000000, 1000000)
-  }
-
-  def arrayLinearAccess(target: Array[Int], size: Int): Long = {
-    @tailrec
-    def go(sum: Long, index: Int, arr: Array[Int]): Long = {
-      if (index < size)
-        go(arr.head + sum, index+ 1, arr.tail)
-      else
-        sum
-    }
-
-    go(0L, 0, target)
-  }
+//  @Benchmark
+//  def arrayLinearAccess_100(): Long = {
+//    arrayLinearAccess(array_100, 100)
+//  }
+//
+//  @Benchmark
+//  def arrayLinearAccess_1000(): Long = {
+//    arrayLinearAccess(array_1000, 1000)
+//  }
+//
+//  @Benchmark
+//  def arrayLinearAccess_10000(): Long = {
+//    arrayLinearAccess(array_10000, 10000)
+//  }
+//
+//  @Benchmark
+//  def arrayLinearAccess_100000(): Long = {
+//    arrayLinearAccess(array_100000, 100000)
+//  }
+//
+//  @Benchmark
+//  def arrayLinearAccess_1000000(): Long = {
+//    arrayLinearAccess(array_1000000, 1000000)
+//  }
+//
+//  def arrayLinearAccess(target: Array[Int], size: Int): Long = {
+//    @tailrec
+//    def go(sum: Long, index: Int, arr: Array[Int]): Long = {
+//      if (index < size)
+//        go(arr.head + sum, index+ 1, arr.tail)
+//      else
+//        sum
+//    }
+//
+//    go(0L, 0, target)
+//  }
 
   /**
    * ランダムアクセス
@@ -216,7 +220,7 @@ class VectorPerformance {
   def arrayRandomAccess(target: Array[Int], indexes: Array[Int]): Long = {
     var sum = 0L
     indexes.foreach { i =>
-      // インデックス用のArrayには1〜Nが格納されているので、インデックスようにマイナス１する
+      // インデックス用のArrayには1〜Nが格納されているので、インデックス用にマイナス１する
       sum += target(i - 1)
     }
     sum
@@ -435,28 +439,28 @@ class VectorPerformance {
   }
 
   @Benchmark
-  def arrayInitUpdate_100(): Array[Int] = {
-    array_100.updated(0,0)
+  def arrayInitUpdate_100(): Unit = {
+    array_100(0) = 0
   }
 
   @Benchmark
-  def arrayInitUpdate_1000(): Array[Int] = {
-    array_1000.updated(0,0)
+  def arrayInitUpdate_1000(): Unit = {
+    array_1000(0) = 0
   }
 
   @Benchmark
-  def arrayInitUpdate_10000(): Array[Int] = {
-    array_10000.updated(0,0)
+  def arrayInitUpdate_10000(): Unit = {
+    array_10000(0) = 0
   }
 
   @Benchmark
-  def arrayInitUpdate_100000(): Array[Int] = {
-    array_100000.updated(0,0)
+  def arrayInitUpdate_100000(): Unit = {
+    array_100000(0) = 0
   }
 
   @Benchmark
-  def arrayInitUpdate_1000000(): Array[Int] = {
-    array_1000000.updated(0,0)
+  def arrayInitUpdate_1000000(): Unit = {
+    array_1000000(0) = 0
   }
 
   /**
@@ -514,28 +518,28 @@ class VectorPerformance {
   }
 
   @Benchmark
-  def arrayLastUpdate_100(): Array[Int] = {
-    array_100.updated(99,0)
+  def arrayLastUpdate_100(): Unit = {
+    array_100(99) = 0
   }
 
   @Benchmark
-  def arrayLastUpdate_1000(): Array[Int] = {
-    array_1000.updated(999,0)
+  def arrayLastUpdate_1000(): Unit = {
+    array_1000(999) = 0
   }
 
   @Benchmark
-  def arrayLastUpdate_10000(): Array[Int] = {
-    array_10000.updated(9999,0)
+  def arrayLastUpdate_10000(): Unit = {
+    array_10000(9999) = 0
   }
 
   @Benchmark
-  def arrayLastUpdate_100000(): Array[Int] = {
-    array_100000.updated(99999,0)
+  def arrayLastUpdate_100000(): Unit = {
+    array_100000(99999) = 0
   }
 
   @Benchmark
-  def arrayLastUpdate_1000000(): Array[Int] = {
-    array_1000000.updated(999999,0)
+  def arrayLastUpdate_1000000(): Unit = {
+    array_1000000(999999) = 0
   }
 
   /**
