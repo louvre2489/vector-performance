@@ -4,11 +4,10 @@ import java.util.concurrent.TimeUnit
 
 import org.openjdk.jmh.annotations._
 
-import scala.annotation.tailrec
 import scala.collection.immutable.List
 
 @BenchmarkMode(Array(Mode.SingleShotTime))
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
 class VectorPerformance {
 
   import VectorPerformance._
@@ -18,115 +17,94 @@ class VectorPerformance {
    */
 
   @Benchmark
-  def listLinearAccess_100(): Long = {
+  def listLinearAccess_100(): Unit = {
     linearAccess(list_100)
   }
 
   @Benchmark
-  def listLinearAccess_1000(): Long = {
+  def listLinearAccess_1000(): Unit = {
     linearAccess(list_1000)
   }
 
   @Benchmark
-  def listLinearAccess_10000(): Long = {
+  def listLinearAccess_10000(): Unit = {
     linearAccess(list_10000)
   }
 
   @Benchmark
-  def listLinearAccess_100000(): Long = {
+  def listLinearAccess_100000(): Unit = {
     linearAccess(list_100000)
   }
 
   @Benchmark
-  def listLinearAccess_1000000(): Long = {
+  def listLinearAccess_1000000(): Unit = {
     linearAccess(list_1000000)
   }
 
-  def linearAccess(target: List[Int]): Long = {
-    @tailrec
-    def go(sum: Long, l: List[Int]): Long = {
-      l match {
-        case Nil => sum
-        case head :: tail => go(head + sum, tail)
-      }
-    }
-
-    go(0L, target)
+  def linearAccess(target: List[Int]): Unit = {
+    var sum = 0L
+    target.foreach(elm => sum = sum + elm)
   }
 
   @Benchmark
-  def vectorLinearAccess_100(): Long = {
-    vectorLinearAccess(vector_100, 100)
+  def vectorLinearAccess_100(): Unit = {
+    vectorLinearAccess(vector_100)
   }
 
   @Benchmark
-  def vectorLinearAccess_1000(): Long = {
-    vectorLinearAccess(vector_1000, 1000)
+  def vectorLinearAccess_1000(): Unit = {
+    vectorLinearAccess(vector_1000)
   }
 
   @Benchmark
-  def vectorLinearAccess_10000(): Long = {
-    vectorLinearAccess(vector_10000, 10000)
+  def vectorLinearAccess_10000(): Unit = {
+    vectorLinearAccess(vector_10000)
   }
 
   @Benchmark
-  def vectorLinearAccess_100000(): Long = {
-    vectorLinearAccess(vector_100000, 100000)
+  def vectorLinearAccess_100000(): Unit = {
+    vectorLinearAccess(vector_1000000)
   }
 
   @Benchmark
-  def vectorLinearAccess_1000000(): Long = {
-    vectorLinearAccess(vector_1000000, 1000000)
+  def vectorLinearAccess_1000000(): Unit = {
+    vectorLinearAccess(vector_1000000)
   }
 
-  def vectorLinearAccess(target: Vector[Int], size: Int): Long = {
-    @tailrec
-    def go(sum: Long, index: Int, l: Vector[Int]): Long = {
-      if (index < size)
-        go(l.head + sum, index + 1, l.tail)
-      else
-        sum
-    }
-
-    go(0L, 0, target)
+  def vectorLinearAccess(target: Vector[Int]): Unit = {
+    var sum = 0L
+    target.foreach(elm => sum = sum + elm)
   }
 
-//  @Benchmark
-//  def arrayLinearAccess_100(): Long = {
-//    arrayLinearAccess(array_100, 100)
-//  }
-//
-//  @Benchmark
-//  def arrayLinearAccess_1000(): Long = {
-//    arrayLinearAccess(array_1000, 1000)
-//  }
-//
-//  @Benchmark
-//  def arrayLinearAccess_10000(): Long = {
-//    arrayLinearAccess(array_10000, 10000)
-//  }
-//
-//  @Benchmark
-//  def arrayLinearAccess_100000(): Long = {
-//    arrayLinearAccess(array_100000, 100000)
-//  }
-//
-//  @Benchmark
-//  def arrayLinearAccess_1000000(): Long = {
-//    arrayLinearAccess(array_1000000, 1000000)
-//  }
-//
-//  def arrayLinearAccess(target: Array[Int], size: Int): Long = {
-//    @tailrec
-//    def go(sum: Long, index: Int, arr: Array[Int]): Long = {
-//      if (index < size)
-//        go(arr.head + sum, index+ 1, arr.tail)
-//      else
-//        sum
-//    }
-//
-//    go(0L, 0, target)
-//  }
+  @Benchmark
+  def arrayLinearAccess_100(): Unit = {
+    arrayLinearAccess(array_100)
+  }
+
+  @Benchmark
+  def arrayLinearAccess_1000(): Unit = {
+    arrayLinearAccess(array_1000)
+  }
+
+  @Benchmark
+  def arrayLinearAccess_10000(): Unit = {
+    arrayLinearAccess(array_10000)
+  }
+
+  @Benchmark
+  def arrayLinearAccess_100000(): Unit = {
+    arrayLinearAccess(array_100000)
+  }
+
+  @Benchmark
+  def arrayLinearAccess_1000000(): Unit = {
+    arrayLinearAccess(array_1000000)
+  }
+
+  def arrayLinearAccess(target: Array[Int]): Unit = {
+    var sum = 0L
+    target.foreach(elm => sum = sum + elm)
+  }
 
   /**
    * ランダムアクセス
@@ -134,22 +112,22 @@ class VectorPerformance {
 
   @Benchmark
   def listRandomAccess_100(): Long = {
-    randomAccess(list_100, indexes_100)
+    randomAccess(list_1000)
   }
 
   @Benchmark
   def listRandomAccess_1000(): Long = {
-    randomAccess(list_1000, indexes_1000)
+    randomAccess(list_1000)
   }
 
   @Benchmark
   def listRandomAccess_10000(): Long = {
-    randomAccess(list_10000, indexes_10000)
+    randomAccess(list_10000)
   }
 
   @Benchmark
   def listRandomAccess_100000(): Long = {
-    randomAccess(list_100000, indexes_100000)
+    randomAccess(list_100000)
   }
 
 //  too slow
@@ -160,66 +138,66 @@ class VectorPerformance {
 
   @Benchmark
   def vectorRandomAccess_100(): Long = {
-    randomAccess(vector_100, indexes_100)
+    randomAccess(vector_100)
   }
 
   @Benchmark
   def vectorRandomAccess_1000(): Long = {
-    randomAccess(vector_1000, indexes_1000)
+    randomAccess(vector_1000)
   }
 
   @Benchmark
   def vectorRandomAccess_10000(): Long = {
-    randomAccess(vector_10000, indexes_10000)
+    randomAccess(vector_100000)
   }
 
   @Benchmark
   def vectorRandomAccess_100000(): Long = {
-    randomAccess(vector_100000, indexes_100000)
+    randomAccess(vector_1000000)
   }
 
   @Benchmark
   def vectorRandomAccess_1000000(): Long = {
-    randomAccess(vector_1000000, indexes_1000000)
+    randomAccess(vector_1000000)
   }
 
-  def randomAccess(target: Seq[Int], indexes: Array[Int]): Long = {
+  def randomAccess(target: Seq[Int]): Long = {
     var sum = 0L
-    indexes.foreach { i =>
+    target.foreach { i =>
       // インデックス用のArrayには1〜Nが格納されているので、インデックスようにマイナス１する
       sum += target(i - 1)
     }
     sum
   }
 
-  @Benchmark
+ @Benchmark
   def arrayRandomAccess_100(): Long = {
-    arrayRandomAccess(array_100, indexes_100)
+    arrayRandomAccess(array_100)
   }
 
   @Benchmark
   def arrayRandomAccess_1000(): Long = {
-    arrayRandomAccess(array_1000, indexes_1000)
+    arrayRandomAccess(array_1000)
   }
 
   @Benchmark
   def arrayRandomAccess_10000(): Long = {
-    arrayRandomAccess(array_10000, indexes_10000)
+    arrayRandomAccess(array_10000)
   }
 
   @Benchmark
   def arrayRandomAccess_100000(): Long = {
-    arrayRandomAccess(array_100000, indexes_100000)
+    arrayRandomAccess(array_100000)
   }
 
   @Benchmark
   def arrayRandomAccess_1000000(): Long = {
-    arrayRandomAccess(array_1000000, indexes_1000000)
+    arrayRandomAccess(array_1000000)
   }
 
-  def arrayRandomAccess(target: Array[Int], indexes: Array[Int]): Long = {
+  def arrayRandomAccess(target: Array[Int]): Long = {
     var sum = 0L
-    indexes.foreach { i =>
+    target.foreach { i =>
       // インデックス用のArrayには1〜Nが格納されているので、インデックス用にマイナス１する
       sum += target(i - 1)
     }
@@ -546,7 +524,7 @@ class VectorPerformance {
    * 関数適用
    */
 
-  @Benchmark
+ @Benchmark
   def listMap_100(): List[Int] = {
     list_100.map(_ - 1)
   }
@@ -625,8 +603,6 @@ class VectorPerformance {
 
 object VectorPerformance {
 
-  import scala.util.Random
-
   final private val range_100 = 1 to 100
   final private val range_1000 = 1 to 1000
   final private val range_10000 = 1 to 10000
@@ -651,9 +627,4 @@ object VectorPerformance {
   final private val array_100000: Array[Int] = range_100000.toArray
   final private val array_1000000: Array[Int] = range_1000000.toArray
 
-  final private val indexes_100 = Random.shuffle(range_100).toArray
-  final private val indexes_1000 = Random.shuffle(range_1000).toArray
-  final private val indexes_10000 = Random.shuffle(range_10000).toArray
-  final private val indexes_100000 = Random.shuffle(range_100000).toArray
-  final private val indexes_1000000 = Random.shuffle(range_1000000).toArray
 }
